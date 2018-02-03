@@ -1,22 +1,35 @@
-var Letter = function(ltr) {
-// property to store the actual letter
-  this.letter = ltr;
-// property/boolean if the letter can be shown
-  this.appear = false;
+// requiring the inquirer npm
+var inquirer = require(‘inquirer’);
 
-  this.letterRender = function() {
-    if(this.letter == ' '){ /*renders a blank as it is*/
-      //makes sure that when the function checks if the word is found doesn't read the blank as false.
-      this.appear = true;
-      return '  ';
-    }if(this.appear === false){ /*if it doesn't appear, it returns a ' _ '*/
-      return ' _ ';
-    } else{ /*otherwise it just appears as itself*/
-      return this.letter;
-    }
-
-  };
+function Letter(char)
+{
+   this.char = char;
+   this.bool = false;
+   //checks to see if that letter has been guessed
+   this.hasBeenGuessed = function()
+   {
+       //boolean statement to check to see if the letter has been guessed or not.
+       if (this.bool)
+       {
+           console.log(“Has already been guessed”);
+       }
+       else
+       {
+           console.log(‘Has not been guessed’);
+       }
+   }
+   //checks to see if the char is in the word/phrase
+   this.check = function(char, word)
+   {
+       console.log(‘User input: ’ + char);
+       //boolea statement to check to see if the char is within the word to guess.
+       if (word.indexOf(char) > -1)
+       {
+           this.bool = true, console.log(‘Correct Guess’);
+       }
+       else
+       {
+           this.bool = true, console.log(“Wrong Guess”);
+       }
+   }
 };
-
-// export to use in word.js
-module.exports = Letter;

@@ -1,56 +1,50 @@
-// require letter objects
-var Letter = require('./letter.js');
-
-function Word(wrd) {
-  var that = this;
-  //store the string wrd
-  this.word = wrd;
-  //collection of letter objects
-  this.letters = [];
-  this.wordFound = false;
-
-  this.getLets = function() {
-    //populate the collection above with new Letter objects
-    for(var i = 0; i<that.word.length; i++){
-      var newLetter = new Letter(that.word[i]);
-      this.letters.push(newLetter);
-    }
-  };
-
-  //found the current word
-  this.didWeFindTheWord = function() {
-    if(this.letters.every(function(lttr){
-      return lttr.appear === true;
-    })){
-      this.wordFound = true;
-      return true;
-    }
-
-  };
-
-  this.checkIfLetterFound = function(guessedLetter) {
-    var whatToReturn = 0;
-    //iterates through each letter to see if it matches the guessed letter
-    this.letters.forEach(function(lttr){
-      if(lttr.letter === guessedLetter){
-        lttr.appear = true;
-        whatToReturn++;
-      }
-    })
-    //if guessLetter matches Letter property, the letter object should be shown
-    return whatToReturn;
-  };
-
-  this.wordRender = function() {
-    var display = '';
-    //render the word based on if letters are found or not
-    that.letters.forEach(function(lttr){
-      var currentLetter = lttr.letterRender();
-      display+= currentLetter;
-    });
-
-    return display;
-  };
-}
-
-module.exports = Word;
+var Letter = require(‘./letter.js’);
+//letterObjArr will hold the current word where it will then get sent through a function that
+//creates letter objects out of the word
+module.exports = function Word(word) {
+   this.word = word;
+   this.returnArr = function (word) {
+       //returns the letters as a string with ‘-’ instead
+       var str = word.toString();
+       var arr = str.split(“”);
+       var arrWord = [];
+       //for each statement of the specific string within wordsArr
+       arr.forEach(character => {
+           //creates a newLetter object from the Letter constructor and passes it the
+           //current character from the word that needs to be guessed.
+           var newLetter = new Letter(character);
+           arrWord.push(newLetter);
+       });
+       console.log(arrWord.toString());
+       return arrWord;
+   }
+   this.returnBlank = function(str) {
+       var blankWord = [];
+       var n = str.toString().length;
+       for (i = 0; i < n; i++) {
+           blankWord.push(“-”);
+       }
+       console.log(blankWord.toString());
+       return blankWord;
+   }
+   this.guess = function (character, arrWord, blankWord) {
+       //returns is guessed, updated string, etc...
+       var newLetter = new Letter(character);
+       //boolean check to see if the letter has been guessed or not...
+       var n = 0;
+       if (newLetter.bool){
+           newLetter.hasBeenGuessed();
+           n = arrWord.indexOf(newLetter);
+           console.log(n);
+           blankWord[n] = character;
+           //prints out the new blankWord with updated letter...
+           console.log(blankWord.toString());
+       } else {
+           newLetter.hasBeenGuessed();
+           n = arrWord.indexOf(newLetter);
+           blankWord[n] = arrWord[0].char;
+           //prints out the new blankWord with updated letter...
+           console.log(blankWord.toString());
+       }
+   }
+};
