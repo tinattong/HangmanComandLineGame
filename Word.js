@@ -1,60 +1,56 @@
-//THIS WILL REQUIRE THE "letter.js" FILE TO BE USED. 
-var Letter = require('./Letter.js');
+// require letter objects
+var Letter = require('./letter.js');
 
-//THIS IS MY CONSTRUCTOR FUNCTION WHICH HANDLES THE TRYLEFT AND TAKES IN CHOSEN WORD 
-//ALSO HOLDS IN THE GUESSES AND THE LETTERS AS WELL
-var Word = function(chosenWord) {
-    this.trysLeft = 10;
-    this.chosenWord = chosenWord;
-    this.letters = [];
-    this.guesses = [];
-    for (var i = 0; i < this.chosenWord.length; i++) {
-        this.letters.push(new Letter.Letter(this.chosenWord[i]));
+function Word(wrd) {
+  var that = this;
+  //store the string wrd
+  this.word = wrd;
+  //collection of letter objects
+  this.letters = [];
+  this.wordFound = false;
+
+  this.getLets = function() {
+    //populate the collection above with new Letter objects
+    for(var i = 0; i<that.word.length; i++){
+      var newLetter = new Letter(that.word[i]);
+      this.letters.push(newLetter);
     }
-};
+  };
 
-//THIS IS MY PROTYPE WHICH IS GOING TO CHECK THE LETTERS BEING PASSED THROUGH 
-//ALSO UPDATES THE TRYSLEFT IF A LETTER IS NOT VALID 
-Word.prototype.checkLetter = function(letter) {
-    this.notCorrect = true;
-    this.isLetterValid = false;
-    var letter = letter.toLowerCase();
-    if (this.guesses.indexOf(letter) != -1) {
-        this.isLetterValid = true;
-    } else {
-        this.guesses.push(letter);
-        for (var i = 0; i < this.letters.length; i++) {
-            if (this.letters[i].letter.toLowerCase() == letter) {
-                this.notCorrect = false;
-                this.letters[i].show = true;
-            }
-        }
-        if (this.notCorrect) {
-            this.trysLeft--;
-        }
+  //found the current word
+  this.didWeFindTheWord = function() {
+    if(this.letters.every(function(lttr){
+      return lttr.appear === true;
+    })){
+      this.wordFound = true;
+      return true;
     }
-};
 
-//THIS IS MY PROTOYPE WHICH RUNS A FUNCTION WHICH CHECKS TO SEE IF IS COMPLETE AND RETURNS FALSE OR TRUE.
-Word.prototype.isComplete = function() {
-    for (var i = 0; i < this.letters.length; i++) {
-        if (!this.letters[i].show) {
-            return false;;
-        }
-    }
-    return true;
-};
+  };
 
-//THIS FUNCTION WILL PRINT THE OUTPUT
-Word.prototype.print = function() {
-    var output = "";
-    for (var i = 0; i < this.letters.length; i++) {
-        output += this.letters[i].printLetra();
-    }
-    return output;
-};
+  this.checkIfLetterFound = function(guessedLetter) {
+    var whatToReturn = 0;
+    //iterates through each letter to see if it matches the guessed letter
+    this.letters.forEach(function(lttr){
+      if(lttr.letter === guessedLetter){
+        lttr.appear = true;
+        whatToReturn++;
+      }
+    })
+    //if guessLetter matches Letter property, the letter object should be shown
+    return whatToReturn;
+  };
 
-//THIS IS THE MODULE EXPORTS WHICH WILL TAKE MY WORD FUNCTION AND EXPORT IT. 
-module.exports = {
-    Word
-};
+  this.wordRender = function() {
+    var display = '';
+    //render the word based on if letters are found or not
+    that.letters.forEach(function(lttr){
+      var currentLetter = lttr.letterRender();
+      display+= currentLetter;
+    });
+
+    return display;
+  };
+}
+
+module.exports = Word;

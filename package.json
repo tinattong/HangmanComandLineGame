@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/tinattong/HangmanComandLineGame/issues"
   },
-  "homepage": "https://github.com/tinattong/HangmanComandLineGame#readme"
+  "homepage": "https://github.com/tinattong/HangmanComandLineGame#readme",
+  "dependencies": {
+    "inquirer": "^5.0.1"
+  }
 }
